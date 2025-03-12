@@ -1,5 +1,4 @@
-from certifi import contents
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -12,7 +11,8 @@ POSTS = [
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return jsonify({"error": "Not Found"}), 404
+    message = error.description if error.description else "Not Found"
+    return jsonify({"error": message}), 404
 
 @app.errorhandler(405)
 def method_not_allowed_error(error):
@@ -58,12 +58,10 @@ def delete_post(id):
     post = find_post_by_id(id)
         # If the post wasn't found, return a 404 error
     if post is None:
-        return '', 404
+        abort(404, description=f'post with id {id} is not found.')
 
     POSTS.remove(post)
-
-        # Return the deleted post
-    return jsonify(post)
+    return jsonify({'message': f'post with id {id} has been deleted successfully.'}), 200
 
 
 

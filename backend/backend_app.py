@@ -23,6 +23,15 @@ def validate_posts_data(data):
         return False
     return True
 
+
+def find_post_by_id(post_id):
+
+    for post in POSTS:
+        if post['id'] == post_id:
+            return post
+
+    return None
+
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
     return jsonify(POSTS)
@@ -41,6 +50,20 @@ def add_new_blog_post():
 
     POSTS.append(new_post)
     return jsonify(POSTS), 201
+
+
+@app.route('/api/posts/<int:id>', methods=['DELETE'])
+def delete_post(id):
+        # Find the post with the given ID
+    post = find_post_by_id(id)
+        # If the post wasn't found, return a 404 error
+    if post is None:
+        return '', 404
+
+    POSTS.remove(post)
+
+        # Return the deleted post
+    return jsonify(post)
 
 
 

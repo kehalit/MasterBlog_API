@@ -63,7 +63,7 @@ def delete_post(id):
     POSTS.remove(post)
 
         # Return the deleted post
-    return jsonify(post)
+    return jsonify({'message': f'post with id {id} has been deleted successfully.'}), 200
 
 
 

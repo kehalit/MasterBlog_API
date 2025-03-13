@@ -80,6 +80,17 @@ def update_post(id):
     # Return the updated post
     return jsonify({'message': f'post with id {id} has been updated successfully. '}), 200
 
+@app.route('/api/posts/search', methods=['GET'])
+def search_posts():
+    title = request.args.get('title')
+    if title:
+        filtered_post = [post for post in POSTS if post.get('title') == title]
+        return  jsonify(filtered_post)
+    else:
+
+        return jsonify(POSTS)
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5005, debug=True)

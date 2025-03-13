@@ -71,14 +71,14 @@ def update_post(id):
 
     # If the post wasn't found, return a 404 error
     if post is None:
-        return '', 404
+        abort(404, description=f'post with id {id} is not found.')
 
-    # Update the book with the new data
+    # Update the post with the new data
     new_data = request.get_json()
     post.update(new_data)
 
-    # Return the updated book
-    return jsonify(post)
+    # Return the updated post
+    return jsonify({'message': f'post with id {id} has been updated successfully. '}), 200
 
 
 if __name__ == '__main__':

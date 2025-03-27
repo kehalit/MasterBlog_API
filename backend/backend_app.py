@@ -142,7 +142,7 @@ def add_new_blog_post():
     new_post['id'] = new_id
 
     POSTS.append(new_post)
-    return jsonify(POSTS), 201
+    return jsonify(new_post), 201
 
 
 @app.route('/api/posts/<int:id>', methods=['DELETE'])
@@ -198,7 +198,7 @@ def update_post(id):
     post.update(new_data)
 
     # Return the updated post
-    return jsonify({'message': f'post with id {id} has been updated successfully. '}), 200
+    return jsonify(post) , 200
 
 
 @app.route('/api/posts/search', methods=['GET'])
@@ -216,12 +216,15 @@ def search_posts():
         - JSON response containing a list of posts that match the search criteria.
         """
     title = request.args.get('title')
-    if title:
-        filtered_post = [post for post in POSTS if post.get('title') == title]
-        return  jsonify(filtered_post)
-    else:
-        return jsonify(POSTS)
+    content = request.args.get('content')
+    filter_post = [
+            post for post in POSTS
+            if (title is None or title.lower() in post.get('title', '').lower()) and
+       (content is None or content.lower() in post.get('content', '').lower())
+        ]
+
+    return jsonify(filter_post)
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5005, debug=True)
+    app.run(host="0.0.0.0", port=5002, debug=True)

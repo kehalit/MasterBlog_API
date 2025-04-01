@@ -38,10 +38,12 @@ Add a new blog post. The request body must include `title` and `content`.
 ## Installation
 To run the project locally, follow these steps:
 
-1.Clone this repository:
+1. Clone this repository:
     git clone https://github.com/kehalit/MasterBlog_API.git
+    
 2. Install the required dependencies:
   pip install -r requirements.txt
+
 3. Run the application:
   backend app.py
   

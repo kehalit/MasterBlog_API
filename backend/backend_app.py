@@ -138,9 +138,12 @@ def add_new_blog_post():
         return jsonify({"error": "Invalid book data"}), 400
 
         # Generate a new ID for the post
-    new_id = max(post['id'] for post in POSTS) + 1
-    new_post['id'] = new_id
+    if POSTS:
+        new_id = max(post['id'] for post in POSTS) + 1
+    else:
+        new_id = 1
 
+    new_post['id'] = new_id
     POSTS.append(new_post)
     return jsonify(new_post), 201
 

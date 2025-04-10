@@ -138,18 +138,15 @@ def add_new_blog_post():
         return jsonify({"error": "Invalid book data"}), 400
 
         # Generate a new ID for the post
-    if POSTS:
-        new_id = max(post['id'] for post in POSTS) + 1
-    else:
-        new_id = 1
+    new_id = max((post['id'] for post in POSTS), default=0) + 1
 
     new_post['id'] = new_id
     POSTS.append(new_post)
     return jsonify(new_post), 201
 
 
-@app.route('/api/posts/<int:id>', methods=['DELETE'])
-def delete_post(id):
+@app.route('/api/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
     """
         Delete a blog post by its ID.
 
@@ -162,17 +159,17 @@ def delete_post(id):
         Returns:
         - JSON response with a success message and 200 status code if successful.
         """
-    post = find_post_by_id(id)
+    post = find_post_by_id(post_id)
         # If the post wasn't found, return a 404 error
     if post is None:
-        abort(404, description=f'post with id {id} is not found.')
+        abort(404, description=f'post with id {post_id} is not found.')
 
     POSTS.remove(post)
-    return jsonify({'message': f'post with id {id} has been deleted successfully.'}), 200
+    return jsonify({'message': f'post with id {post_id} has been deleted successfully.'}), 200
 
 
-@app.route('/api/posts/<int:id>', methods=['PUT'])
-def update_post(id):
+@app.route('/api/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
     """
         Update a blog post by its ID.
 
@@ -190,11 +187,11 @@ def update_post(id):
         Returns:
         - JSON response with a success message and 200 status code if successful.
         """
-    post = find_post_by_id(id)
+    post = find_post_by_id(post_id)
 
     # If the post wasn't found, return a 404 error
     if post is None:
-        abort(404, description=f'post with id {id} is not found.')
+        abort(404, description=f'post with id {post_id} is not found.')
 
     # Update the post with the new data
     new_data = request.get_json()
